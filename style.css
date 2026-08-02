@@ -349,12 +349,12 @@ td.col-num{font-family:var(--font-mono); color:var(--text-muted);}
 .modal-photos{
   display:flex;
   background:var(--parchment-2);
+  height:52vh;
 }
-.modal-photos img{width:50%; object-fit:cover; display:block; max-height:52vh;}
+.modal-photos img{width:50%; height:100%; object-fit:contain; display:block; background:var(--parchment-2);}
 .modal-photos .no-photo{
-  width:50%; display:flex; align-items:center; justify-content:center;
+  width:50%; height:100%; display:flex; align-items:center; justify-content:center;
   font-family:var(--font-mono); font-size:0.75rem; color:var(--text-ink-muted);
-  min-height:220px;
 }
 .modal-body{padding:1.8rem 2rem 2.2rem;}
 .modal-label{
@@ -395,8 +395,8 @@ footer{
   .controls{padding:0.9rem 5vw;}
   main{padding:1.8rem 5vw 4rem;}
   .result-count{order:10; width:100%; margin-left:0;}
-  .modal-photos{flex-direction:column;}
-  .modal-photos img, .modal-photos .no-photo{width:100%;}
+  .modal-photos{flex-direction:column; height:auto;}
+  .modal-photos img, .modal-photos .no-photo{width:100%; height:32vh;}
 }
 
 .hidden{display:none !important;}
