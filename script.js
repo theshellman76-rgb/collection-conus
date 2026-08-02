@@ -200,10 +200,12 @@ function applyFilters() {
   const q = document.getElementById("search").value.trim().toLowerCase();
   const origin = document.getElementById("filter-origin").value;
   const quality = document.getElementById("filter-quality").value;
+  const author = document.getElementById("filter-author").value;
 
   let list = ALL_SPECIMENS.filter(s => {
     if (origin && s.origine !== origin) return false;
     if (quality && s.qualite !== quality) return false;
+    if (author && s.auteur !== author) return false;
     if (currentLetter && normalizeLetter(s.nom) !== currentLetter) return false;
     if (showFavoritesOnly && !s.favori) return false;
     if (q) {
@@ -254,10 +256,13 @@ function populateAlphaBar() {
 function populateFilterOptions() {
   const origins = [...new Set(ALL_SPECIMENS.map(s => s.origine).filter(Boolean))].sort();
   const qualities = [...new Set(ALL_SPECIMENS.map(s => s.qualite).filter(Boolean))].sort();
+  const authors = [...new Set(ALL_SPECIMENS.map(s => s.auteur).filter(Boolean))].sort();
   const originSel = document.getElementById("filter-origin");
   const qualitySel = document.getElementById("filter-quality");
+  const authorSel = document.getElementById("filter-author");
   origins.forEach(o => originSel.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`));
   qualities.forEach(q => qualitySel.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(q)}">${escapeHtml(q)}</option>`));
+  authors.forEach(a => authorSel.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`));
 }
 
 function updateStats() {
@@ -312,6 +317,7 @@ async function init() {
   document.getElementById("search").addEventListener("input", applyFilters);
   document.getElementById("filter-origin").addEventListener("change", applyFilters);
   document.getElementById("filter-quality").addEventListener("change", applyFilters);
+  document.getElementById("filter-author").addEventListener("change", applyFilters);
 
   document.getElementById("btn-grid").addEventListener("click", () => setView("grid"));
   document.getElementById("btn-table").addEventListener("click", () => setView("table"));
