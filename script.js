@@ -67,6 +67,13 @@ function buildPhotoIndex(manifest) {
 // ============================================================
 let ALL_SPECIMENS = [];
 let currentSort = { key: null, dir: 1 };
+let currentLetter = "";
+
+function normalizeLetter(str) {
+  return (str || "")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // retire les accents
+    .trim().charAt(0).toUpperCase();
+}
 
 async function loadData() {
   const [csvRes, manifestRes] = await Promise.all([
@@ -179,6 +186,7 @@ function applyFilters() {
   let list = ALL_SPECIMENS.filter(s => {
     if (origin && s.origine !== origin) return false;
     if (quality && s.qualite !== quality) return false;
+    if (currentLetter && normalizeLetter(s.nom) !== currentLetter) return false;
     if (q) {
       const hay = `${s.nom} ${s.origine} ${s.auteur}`.toLowerCase();
       if (!hay.includes(q)) return false;
@@ -204,6 +212,24 @@ function applyFilters() {
 
   renderGrid(list);
   renderTable(list);
+}
+
+function populateAlphaBar() {
+  const available = new Set(ALL_SPECIMENS.map(s => normalizeLetter(s.nom)));
+  const bar = document.getElementById("alpha-bar");
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  bar.innerHTML = letters.map(l => {
+    const has = available.has(l);
+    return `<button class="alpha-btn" data-letter="${l}" ${has ? "" : "disabled"}>${l}</button>`;
+  }).join("");
+  bar.addEventListener("click", e => {
+    const btn = e.target.closest(".alpha-btn");
+    if (!btn || btn.disabled) return;
+    const letter = btn.dataset.letter;
+    currentLetter = currentLetter === letter ? "" : letter;
+    bar.querySelectorAll(".alpha-btn").forEach(b => b.classList.toggle("active", b.dataset.letter === currentLetter));
+    applyFilters();
+  });
 }
 
 function populateFilterOptions() {
@@ -257,6 +283,7 @@ async function init() {
   document.getElementById("grid-view").classList.remove("hidden");
 
   populateFilterOptions();
+  populateAlphaBar();
   updateStats();
   applyFilters();
 
