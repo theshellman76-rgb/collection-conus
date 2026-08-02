@@ -68,6 +68,7 @@ function buildPhotoIndex(manifest) {
 let ALL_SPECIMENS = [];
 let currentSort = { key: null, dir: 1 };
 let currentLetter = "";
+let showFavoritesOnly = false;
 
 function normalizeLetter(str) {
   return (str || "")
@@ -93,6 +94,7 @@ async function loadData() {
     auteur: header.indexOf("auteur"),
     photo1: header.indexOf("photos1"),
     photo2: header.indexOf("photos2"),
+    favoris: header.indexOf("favoris"),
   };
 
   const nextPhoto = buildPhotoIndex(manifest);
@@ -109,10 +111,25 @@ async function loadData() {
       auteur: (r[idx.auteur] || "").trim(),
       photo1: nextPhoto(photo1Base),
       photo2: nextPhoto(photo2Base),
+      favori: idx.favoris >= 0 && (r[idx.favoris] || "").trim().toLowerCase() === "oui",
     };
   }).filter(s => s.nom);
 
-  return specimens;
+  return groupSameSpeciesBySize(specimens);
+}
+
+// Regroupe les lignes de même nom d'espèce ensemble (ordre de première apparition
+// conservé) et les trie par taille décroissante à l'intérieur de chaque groupe.
+function groupSameSpeciesBySize(specimens) {
+  const order = [];
+  const groups = {};
+  specimens.forEach(s => {
+    if (!groups[s.nom]) { groups[s.nom] = []; order.push(s.nom); }
+    groups[s.nom].push(s);
+  });
+  const parseTaille = v => parseFloat((v || "0").replace(",", ".")) || 0;
+  order.forEach(nom => groups[nom].sort((a, b) => parseTaille(b.taille) - parseTaille(a.taille)));
+  return order.flatMap(nom => groups[nom]);
 }
 
 // ============================================================
@@ -133,6 +150,7 @@ function renderGrid(list) {
   el.innerHTML = list.map(s => `
     <article class="card" tabindex="0" data-id="${s.id}">
       <span class="card-pin"></span>
+      ${s.favori ? `<span class="card-fav"><svg viewBox="0 0 16 16"><path d="M8 1.5l1.9 4.3 4.6.4-3.5 3.1 1.1 4.6L8 11.6l-4.1 2.3 1.1-4.6-3.5-3.1 4.6-.4z"/></svg></span>` : ""}
       <div class="card-photos">
         ${photoOrPlaceholder(s.photo1, s.nom + " — face")}
         ${photoOrPlaceholder(s.photo2, s.nom + " — dos")}
@@ -187,6 +205,7 @@ function applyFilters() {
     if (origin && s.origine !== origin) return false;
     if (quality && s.qualite !== quality) return false;
     if (currentLetter && normalizeLetter(s.nom) !== currentLetter) return false;
+    if (showFavoritesOnly && !s.favori) return false;
     if (q) {
       const hay = `${s.nom} ${s.origine} ${s.auteur}`.toLowerCase();
       if (!hay.includes(q)) return false;
@@ -296,6 +315,14 @@ async function init() {
 
   document.getElementById("btn-grid").addEventListener("click", () => setView("grid"));
   document.getElementById("btn-table").addEventListener("click", () => setView("table"));
+
+  document.getElementById("btn-favorites").addEventListener("click", () => {
+    showFavoritesOnly = !showFavoritesOnly;
+    const btn = document.getElementById("btn-favorites");
+    btn.classList.toggle("active", showFavoritesOnly);
+    btn.setAttribute("aria-pressed", String(showFavoritesOnly));
+    applyFilters();
+  });
 
   document.querySelectorAll("thead th[data-sort]").forEach(th => {
     th.addEventListener("click", () => {
