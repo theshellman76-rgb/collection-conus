@@ -62,9 +62,64 @@ function buildPhotoIndex(manifest) {
   };
 }
 
-// ============================================================
-// CHARGEMENT
-// ============================================================
+// Extrait le pays depuis un champ "Origine" du type "Lieu, région - Pays"
+function extractCountry(origine) {
+  const raw = (origine || "").trim();
+  if (!raw) return "";
+  const parts = raw.split(" - ");
+  return parts[parts.length - 1].trim();
+}
+
+// Réduit un champ "Auteur" à son seul nom, en retirant l'année
+// ex. "Sowerby, 1784" et "Sowerby, 1785" -> "Sowerby"
+function normalizeAuthor(auteur) {
+  return (auteur || "")
+    .replace(/[()]/g, "")
+    .replace(/\b\d{4}[a-z]?\b/gi, "")
+    .replace(/,\s*$/, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
+// Table de correspondance pays (normalisé, sans accents) -> continent
+const COUNTRY_TO_CONTINENT = {
+  "indonesie":"asie","inde":"asie","thailande":"asie","philippines":"asie","singapour":"asie",
+  "vietnam":"asie","malaisie":"asie","japon":"asie","sri lanka":"asie","oman":"asie","yemen":"asie",
+  "chine":"asie","taiwan":"asie","myanmar":"asie","birmanie":"asie","cambodge":"asie","emirats arabes unis":"asie",
+  "arabie saoudite":"asie","qatar":"asie","koweit":"asie","bahrein":"asie","israel":"asie","pakistan":"asie",
+  "bangladesh":"asie","coree du sud":"asie","hong kong":"asie",
+
+  "madagascar":"afrique","senegal":"afrique","angola":"afrique","mayotte":"afrique","reunion":"afrique",
+  "la reunion":"afrique","maurice":"afrique","ile maurice":"afrique","djibouti":"afrique",
+  "afrique du sud":"afrique","kenya":"afrique","tanzanie":"afrique","zanzibar":"afrique","cap vert":"afrique",
+  "comores":"afrique","egypte":"afrique","soudan":"afrique","mozambique":"afrique","somalie":"afrique",
+  "erythree":"afrique","nigeria":"afrique","ghana":"afrique","gabon":"afrique","namibie":"afrique",
+  "seychelles":"afrique","cote d'ivoire":"afrique","cote divoire":"afrique","maroc":"afrique","tunisie":"afrique",
+
+  "nouvelle caledonie":"oceanie","nouvelle-caledonie":"oceanie","australie":"oceanie",
+  "papouasie nouvelle guinee":"oceanie","papouasie-nouvelle-guinee":"oceanie","fidji":"oceanie",
+  "vanuatu":"oceanie","polynesie francaise":"oceanie","polynesie":"oceanie","salomon":"oceanie",
+  "iles salomon":"oceanie","tonga":"oceanie","samoa":"oceanie","micronesie":"oceanie","palau":"oceanie",
+  "kiribati":"oceanie","wallis et futuna":"oceanie","niue":"oceanie","nouvelle zelande":"oceanie",
+
+  "panama":"amerique","mexique":"amerique","etats unis":"amerique","etats-unis":"amerique","usa":"amerique",
+  "floride":"amerique","bresil":"amerique","colombie":"amerique","equateur":"amerique","venezuela":"amerique",
+  "costa rica":"amerique","perou":"amerique","antilles":"amerique","caraibes":"amerique","cuba":"amerique",
+  "guadeloupe":"amerique","martinique":"amerique","canada":"amerique","chili":"amerique",
+
+  "france":"europe","espagne":"europe","grece":"europe","italie":"europe","portugal":"europe",
+  "croatie":"europe","malte":"europe","chypre":"europe","corse":"europe",
+};
+
+function countryToContinent(country) {
+  const key = (country || "")
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .trim();
+  return COUNTRY_TO_CONTINENT[key] || null;
+}
+
+
 let ALL_SPECIMENS = [];
 let currentSort = { key: null, dir: 1 };
 let currentLetter = "";
@@ -106,9 +161,11 @@ async function loadData() {
       id: i,
       nom: (r[idx.nom] || "").trim(),
       origine: (r[idx.origine] || "").trim(),
+      pays: extractCountry(r[idx.origine]),
       taille: (r[idx.taille] || "").trim(),
       qualite: (r[idx.qualite] || "").trim(),
       auteur: (r[idx.auteur] || "").trim(),
+      auteurCourt: normalizeAuthor(r[idx.auteur]),
       photo1: nextPhoto(photo1Base),
       photo2: nextPhoto(photo2Base),
       favori: idx.favoris >= 0 && (r[idx.favoris] || "").trim().toLowerCase() === "oui",
@@ -203,9 +260,9 @@ function applyFilters() {
   const author = document.getElementById("filter-author").value;
 
   let list = ALL_SPECIMENS.filter(s => {
-    if (origin && s.origine !== origin) return false;
+    if (origin && s.pays !== origin) return false;
     if (quality && s.qualite !== quality) return false;
-    if (author && s.auteur !== author) return false;
+    if (author && s.auteurCourt !== author) return false;
     if (currentLetter && normalizeLetter(s.nom) !== currentLetter) return false;
     if (showFavoritesOnly && !s.favori) return false;
     if (q) {
@@ -254,15 +311,27 @@ function populateAlphaBar() {
 }
 
 function populateFilterOptions() {
-  const origins = [...new Set(ALL_SPECIMENS.map(s => s.origine).filter(Boolean))].sort();
+  const origins = [...new Set(ALL_SPECIMENS.map(s => s.pays).filter(Boolean))].sort();
   const qualities = [...new Set(ALL_SPECIMENS.map(s => s.qualite).filter(Boolean))].sort();
-  const authors = [...new Set(ALL_SPECIMENS.map(s => s.auteur).filter(Boolean))].sort();
+  const authors = [...new Set(ALL_SPECIMENS.map(s => s.auteurCourt).filter(Boolean))].sort();
   const originSel = document.getElementById("filter-origin");
   const qualitySel = document.getElementById("filter-quality");
   const authorSel = document.getElementById("filter-author");
   origins.forEach(o => originSel.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`));
   qualities.forEach(q => qualitySel.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(q)}">${escapeHtml(q)}</option>`));
   authors.forEach(a => authorSel.insertAdjacentHTML("beforeend", `<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`));
+}
+
+function updateWorldMap() {
+  const counts = { amerique: 0, europe: 0, afrique: 0, asie: 0, oceanie: 0 };
+  ALL_SPECIMENS.forEach(s => {
+    const continent = countryToContinent(s.pays);
+    if (continent && counts.hasOwnProperty(continent)) counts[continent]++;
+  });
+  Object.keys(counts).forEach(c => {
+    const el = document.getElementById("count-" + c);
+    if (el) el.textContent = counts[c];
+  });
 }
 
 function updateStats() {
@@ -309,6 +378,7 @@ async function init() {
   populateFilterOptions();
   populateAlphaBar();
   updateStats();
+  updateWorldMap();
   applyFilters();
 
   document.getElementById("last-updated").textContent =
