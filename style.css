@@ -132,8 +132,8 @@ body{
 }
 .search-wrap{
   position:relative;
-  flex:1 1 240px;
-  min-width:180px;
+  flex:0 1 190px;
+  min-width:140px;
 }
 .search-wrap input{
   width:100%;
@@ -171,6 +171,7 @@ select{
   background-position:right 0.7rem center;
 }
 select:focus{border-color:var(--brass);}
+#filter-origin{max-width:210px;}
 
 .fav-toggle{
   display:flex; align-items:center; gap:0.4em;
