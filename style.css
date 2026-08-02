@@ -181,6 +181,34 @@ select:focus{border-color:var(--brass);}
   margin-left:auto;
 }
 
+/* ---------- Alpha bar ---------- */
+.alpha-bar{
+  display:flex; flex-wrap:wrap; gap:0.3rem;
+  padding:0.8rem 6vw;
+  border-bottom:1px solid var(--line);
+  background:var(--ink-2);
+}
+.alpha-btn{
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--text-muted);
+  font-family:var(--font-mono);
+  font-size:0.76rem;
+  width:28px; height:28px;
+  border-radius:3px;
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .12s, color .12s, border-color .12s;
+}
+.alpha-btn:hover:not(:disabled){border-color:var(--brass); color:var(--text-warm);}
+.alpha-btn:disabled{opacity:0.28; cursor:default;}
+.alpha-btn.active{background:var(--brass); border-color:var(--brass); color:var(--ink);}
+
+@media (max-width:640px){
+  .alpha-bar{padding:0.7rem 5vw; gap:0.25rem;}
+  .alpha-btn{width:24px; height:24px; font-size:0.7rem;}
+}
+
 /* ---------- Main ---------- */
 main{padding:2.6rem 6vw 6rem;}
 
