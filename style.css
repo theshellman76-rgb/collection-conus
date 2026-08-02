@@ -43,14 +43,34 @@ body{
     radial-gradient(ellipse at 90% 0%, rgba(182,144,90,0.08), transparent 50%);
   overflow:hidden;
   display:flex;
+  flex-wrap:wrap;
   align-items:center;
   justify-content:space-between;
-  gap:3rem;
+  gap:2rem 3rem;
 }
 .header-content{position:relative; flex:1 1 auto; min-width:0;}
+
+.world-map-inline{
+  flex:0 1 320px;
+  min-width:220px;
+  align-self:center;
+}
+.world-map-inline .world-eyebrow{
+  font-family:var(--font-mono);
+  font-size:0.66rem;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--brass-bright);
+  margin:0 0 0.5rem;
+  text-align:center;
+}
+.world-map-inline svg{width:100%; height:auto; display:block;}
+.world-map-inline .continent-badge .badge-num{font-size:19px;}
+.world-map-inline .continent-badge .badge-label{font-size:9px;}
+
 .header-logo{
   flex:0 0 auto;
-  width:clamp(120px, 14vw, 190px);
+  width:clamp(110px, 11vw, 160px);
   position:relative;
 }
 .header-logo img{width:100%; height:auto; display:block; border-radius:50%;}
@@ -121,23 +141,6 @@ body{
 }
 
 /* ---------- World map ---------- */
-.world-section{
-  padding:2.2rem 6vw 2.4rem;
-  border-bottom:1px solid var(--line);
-  background:var(--ink-2);
-}
-.world-eyebrow{
-  font-family:var(--font-mono);
-  font-size:0.7rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--brass-bright);
-  margin:0 0 1rem;
-  display:flex; align-items:center; gap:0.6em;
-}
-.world-eyebrow::before{content:""; width:22px; height:1px; background:var(--brass-bright); display:inline-block;}
-.world-map{max-width:840px; margin:0 auto;}
-.world-map svg{width:100%; height:auto; display:block;}
 .continent-badge circle{
   fill:var(--parchment);
   stroke:var(--brass-bright);
@@ -502,6 +505,7 @@ footer{
 /* ---------- Responsive ---------- */
 @media (max-width:640px){
   .site-header{padding:3.4rem 6vw 2.6rem; flex-direction:column; align-items:flex-start; gap:1.8rem;}
+  .world-map-inline{width:100%; align-self:center; flex-basis:auto; max-width:340px;}
   .header-logo{width:120px; align-self:center;}
   .controls{padding:0.9rem 5vw;}
   main{padding:1.8rem 5vw 4rem;}
