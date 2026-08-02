@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conus — Collection</title>
+<meta name="description" content="Collection de coquillages Conus — catalogue en ligne.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <p class="eyebrow">Catalogue privé · Conidae</p>
+  <h1 class="site-title">Collection<br><em>Conus</em></h1>
+  <p class="site-sub">Un inventaire de coquillages du genre <em style="font-style:italic">Conus</em>, réunis au fil des trouvailles — origine, taille, état de conservation et référence de l'auteur pour chaque spécimen.</p>
+  <div class="header-stats">
+    <div class="stat"><span class="stat-num" id="stat-total">—</span><span class="stat-label">Spécimens</span></div>
+    <div class="stat"><span class="stat-num" id="stat-species">—</span><span class="stat-label">Espèces</span></div>
+    <div class="stat"><span class="stat-num" id="stat-origins">—</span><span class="stat-label">Provenances</span></div>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="6.5"/><path d="M14 14l4 4"/></svg>
+    <input type="text" id="search" placeholder="Rechercher un nom, une origine, un auteur…">
+  </div>
+  <select id="filter-origin"><option value="">Toutes provenances</option></select>
+  <select id="filter-quality"><option value="">Tous états</option></select>
+  <div class="view-toggle">
+    <button id="btn-grid" class="active" aria-pressed="true">
+      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="1" y="9" width="6" height="6"/><rect x="9" y="9" width="6" height="6"/></svg>
+      Grille
+    </button>
+    <button id="btn-table" aria-pressed="false">
+      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="2" width="14" height="2"/><rect x="1" y="7" width="14" height="2"/><rect x="1" y="12" width="14" height="2"/></svg>
+      Tableau
+    </button>
+  </div>
+  <span class="result-count" id="result-count"></span>
+</div>
+
+<main>
+  <div id="loading">
+    <div class="spinner"></div>
+    Chargement du catalogue…
+  </div>
+  <div id="empty-state">Aucun spécimen ne correspond à cette recherche.</div>
+  <div class="grid hidden" id="grid-view"></div>
+  <div class="table-wrap hidden" id="table-view">
+    <table>
+      <thead>
+        <tr>
+          <th data-sort="thumb"></th>
+          <th data-sort="nom">Nom <span class="arrow"></span></th>
+          <th data-sort="origine">Origine <span class="arrow"></span></th>
+          <th data-sort="taille">Taille (mm) <span class="arrow"></span></th>
+          <th data-sort="qualite">État <span class="arrow"></span></th>
+          <th data-sort="auteur">Auteur <span class="arrow"></span></th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer>
+  <span>Collection Conus — catalogue généré depuis Google Sheets</span>
+  <span id="last-updated"></span>
+</footer>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <button class="modal-close" id="modal-close" aria-label="Fermer">✕</button>
+    <div class="modal-photos" id="modal-photos"></div>
+    <div class="modal-body">
+      <p class="modal-label" id="modal-label">Spécimen</p>
+      <h2 class="modal-name" id="modal-name"></h2>
+      <dl class="modal-grid">
+        <div class="modal-field"><dt>Origine</dt><dd id="modal-origine"></dd></div>
+        <div class="modal-field"><dt>Taille</dt><dd id="modal-taille"></dd></div>
+        <div class="modal-field"><dt>État</dt><dd id="modal-qualite"></dd></div>
+        <div class="modal-field"><dt>Auteur</dt><dd id="modal-auteur"></dd></div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
