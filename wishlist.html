@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wishlist — Conus</title>
+<meta name="description" content="Liste de souhaits et alertes de disponibilité — collection Conus.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="index.html">Collection</a>
+  <a href="wishlist.html" class="active">Wishlist</a>
+</nav>
+
+<header class="site-header wishlist-header">
+  <div class="header-content">
+    <p class="eyebrow">Catalogue privé · Conidae</p>
+    <h1 class="site-title">Ma<br><em>Wishlist</em></h1>
+    <p class="site-sub">Les espèces qu'il me manque, avec un prix limite. Une veille automatique surveille eBay et shellauction.net et alerte ici et par e-mail dès qu'une correspondance apparaît.</p>
+  </div>
+</header>
+
+<main class="wishlist-main">
+
+  <section class="alerts-section">
+    <p class="section-eyebrow">🔔 Alertes récentes</p>
+    <div id="alerts-loading" class="muted-note">Chargement des alertes…</div>
+    <div id="alerts-empty" class="muted-note hidden">Aucune correspondance trouvée pour le moment. La prochaine vérification aura lieu automatiquement.</div>
+    <div id="alerts-list" class="alerts-list"></div>
+  </section>
+
+  <section class="wishlist-section">
+    <p class="section-eyebrow">Espèces recherchées</p>
+    <div id="wishlist-loading" class="muted-note">Chargement de la wishlist…</div>
+    <div id="wishlist-grid" class="wishlist-grid"></div>
+  </section>
+
+</main>
+
+<footer>
+  <span>Wishlist Conus — veille automatique eBay & shellauction.net</span>
+  <span id="last-check"></span>
+</footer>
+
+<script src="wishlist.js"></script>
+</body>
+</html>

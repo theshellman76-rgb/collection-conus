@@ -1,0 +1,10 @@
+{
+  "name": "conus-wishlist-watch",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Script de veille eBay + shellauction.net pour la wishlist Conus",
+  "main": "watch.js",
+  "dependencies": {
+    "nodemailer": "^6.9.14"
+  }
+}
