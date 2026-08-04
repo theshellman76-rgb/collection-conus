@@ -9,11 +9,6 @@
 </head>
 <body>
 
-<nav class="top-nav">
-  <a href="index.html" class="active">Collection</a>
-  <a href="wishlist.html">Wishlist</a>
-</nav>
-
 <header class="site-header">
   <div class="header-content">
     <p class="eyebrow">Catalogue privé · Conidae</p>
@@ -82,8 +77,18 @@
     </svg>
   </div>
 
-  <div class="header-logo" aria-hidden="true">
+  <div class="header-logo" aria-hidden="false">
     <img src="logo.jpg" alt="Logo Conus milneedwardsi" loading="eager">
+    <div class="hamburger-wrap">
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="hamburger-menu" id="hamburger-menu">
+        <a href="index.html" data-page="index">Collection</a>
+        <a href="wishlist.html" data-page="wishlist">Wishlist</a>
+        <a href="profil.html" data-page="profil">Profil</a>
+      </nav>
+    </div>
   </div>
 </header>
 
@@ -160,6 +165,7 @@
   </div>
 </div>
 
+<script src="nav.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
