@@ -5,7 +5,7 @@
 const SHEET_ID = "1VOqCt19cDgk06bNNxXoUoeReC_I09Bgub6kkvyu8hcc";
 const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 const PHOTOS_DIR = "photos/";
-const MANIFEST_URL = "manifest.json";
+const PHOTO_EXTENSIONS = ["JPG", "jpg", "JPEG", "jpeg", "PNG", "png"];
 
 // ============================================================
 // CSV PARSING (gère les guillemets et virgules dans les champs)
@@ -32,33 +32,22 @@ function parseCSV(text) {
 }
 
 // ============================================================
-// CORRESPONDANCE PHOTOS <-> LIGNES (gère les doublons d'espèces)
+// NOM DE FICHIER ATTENDU (gère les doublons d'espèces)
 // ============================================================
-// Google Drive renomme les fichiers en double : "Nom.JPG", "Nom 1.JPG", "Nom 2.JPG"...
-// On associe ces variantes aux lignes du tableau dans l'ordre d'apparition.
-function buildPhotoIndex(manifest) {
-  // base name (sans extension, sans suffixe " N") -> liste triée de fichiers réels
-  const groups = {};
-  const re = /^(.*?)(?: (\d+))?\.(jpe?g|png|webp)$/i;
-  manifest.forEach(filename => {
-    const m = filename.match(re);
-    if (!m) return;
-    const base = m[1].trim().toLowerCase();
-    const suffix = m[2] ? parseInt(m[2], 10) : -1; // -1 = pas de suffixe = premier
-    if (!groups[base]) groups[base] = [];
-    groups[base].push({ filename, suffix });
-  });
-  Object.values(groups).forEach(list => list.sort((a, b) => a.suffix - b.suffix));
-
-  const cursors = {}; // base -> index du prochain fichier à distribuer
+// Google Drive numérote les fichiers en double : "Nom.ext", "Nom 1.ext", "Nom 2.ext"...
+// On calcule ce nom directement à partir de l'ordre d'apparition dans le tableau,
+// sans dépendre d'une liste figée : un fichier renommé/ajouté est pris en compte
+// dès le prochain chargement de la page.
+function buildPhotoIndex() {
+  const cursors = {}; // base (en minuscules) -> nombre de fois déjà vu
   return function nextPhotoFor(baseNameRaw) {
-    const base = (baseNameRaw || "").trim().toLowerCase();
-    const list = groups[base];
-    if (!list) return null;
-    const idx = cursors[base] || 0;
-    if (idx >= list.length) return null;
-    cursors[base] = idx + 1;
-    return PHOTOS_DIR + list[idx].filename;
+    const base = (baseNameRaw || "").trim();
+    if (!base) return null;
+    const key = base.toLowerCase();
+    const occurrence = cursors[key] || 0;
+    cursors[key] = occurrence + 1;
+    const suffix = occurrence === 0 ? "" : ` ${occurrence}`;
+    return `${base}${suffix}`; // sans dossier ni extension : géré à l'affichage
   };
 }
 
@@ -132,12 +121,8 @@ function normalizeLetter(str) {
 }
 
 async function loadData() {
-  const [csvRes, manifestRes] = await Promise.all([
-    fetch(SHEET_CSV_URL),
-    fetch(MANIFEST_URL).catch(() => null)
-  ]);
+  const csvRes = await fetch(SHEET_CSV_URL);
   const csvText = await csvRes.text();
-  const manifest = manifestRes && manifestRes.ok ? await manifestRes.json() : [];
   const rows = parseCSV(csvText);
 
   const header = rows[0].map(h => h.trim().toLowerCase());
@@ -152,7 +137,7 @@ async function loadData() {
     favoris: header.indexOf("favoris"),
   };
 
-  const nextPhoto = buildPhotoIndex(manifest);
+  const nextPhoto = buildPhotoIndex();
 
   const specimens = rows.slice(1).map((r, i) => {
     const photo1Base = idx.photo1 >= 0 ? r[idx.photo1] : "";
@@ -196,11 +181,30 @@ function escapeHtml(str) {
   return (str || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
-function photoOrPlaceholder(src, label) {
-  return src
-    ? `<img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="lazy">`
-    : `<div class="no-photo">photo à venir</div>`;
+function photoOrPlaceholder(stem, label) {
+  if (!stem) return `<div class="no-photo">photo à venir</div>`;
+  const src = `${PHOTOS_DIR}${stem}.${PHOTO_EXTENSIONS[0]}`;
+  return `<img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" loading="lazy" data-stem="${escapeHtml(stem)}" data-try="0" onerror="handlePhotoError(this)">`;
 }
+
+// Si une extension échoue, on essaie la suivante ; si aucune ne fonctionne,
+// l'image est remplacée par le même placeholder "photo à venir".
+function handlePhotoError(img) {
+  const stem = img.dataset.stem;
+  const tryIdx = parseInt(img.dataset.try || "0", 10) + 1;
+  if (tryIdx < PHOTO_EXTENSIONS.length) {
+    img.dataset.try = String(tryIdx);
+    img.src = `${PHOTOS_DIR}${stem}.${PHOTO_EXTENSIONS[tryIdx]}`;
+  } else if (img.dataset.fallback === "hide") {
+    img.remove(); // vignette de tableau : on n'affiche simplement rien
+  } else {
+    const placeholder = document.createElement("div");
+    placeholder.className = "no-photo";
+    placeholder.textContent = "photo à venir";
+    img.replaceWith(placeholder);
+  }
+}
+window.handlePhotoError = handlePhotoError;
 
 function renderGrid(list) {
   const el = document.getElementById("grid-view");
@@ -228,7 +232,7 @@ function renderTable(list) {
   const el = document.getElementById("table-body");
   el.innerHTML = list.map(s => `
     <tr data-id="${s.id}">
-      <td class="col-thumb">${s.photo1 ? `<img src="${escapeHtml(s.photo1)}" alt="" loading="lazy">` : ""}</td>
+      <td class="col-thumb">${s.photo1 ? `<img src="${escapeHtml(PHOTOS_DIR + s.photo1 + '.' + PHOTO_EXTENSIONS[0])}" alt="" loading="lazy" data-stem="${escapeHtml(s.photo1)}" data-try="0" data-fallback="hide" onerror="handlePhotoError(this)">` : ""}</td>
       <td class="col-name">${escapeHtml(s.nom)}</td>
       <td>${escapeHtml(s.origine || "—")}</td>
       <td class="col-num">${escapeHtml(s.taille || "—")}</td>
