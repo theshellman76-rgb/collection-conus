@@ -82,11 +82,31 @@ async function loadAlerts() {
   }
 }
 
+// ============================================================
+// ANNONCES MASQUÉES (mémorisées dans ce navigateur)
+// ============================================================
+const DISMISSED_KEY = "conus-dismissed-alerts";
+
+function getDismissedIds() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(DISMISSED_KEY) || "[]"));
+  } catch (e) {
+    return new Set();
+  }
+}
+
+function dismissAlert(id) {
+  const set = getDismissedIds();
+  set.add(id);
+  localStorage.setItem(DISMISSED_KEY, JSON.stringify([...set]));
+}
+
 function renderAlerts(data) {
   document.getElementById("alerts-loading").classList.add("hidden");
   const list = document.getElementById("alerts-list");
   const empty = document.getElementById("alerts-empty");
-  const matches = data.matches || [];
+  const dismissed = getDismissedIds();
+  const matches = (data.matches || []).filter(m => !dismissed.has(m.id));
 
   if (!matches.length) {
     empty.classList.remove("hidden");
@@ -94,7 +114,7 @@ function renderAlerts(data) {
   } else {
     empty.classList.add("hidden");
     list.innerHTML = matches.map(m => `
-      <div class="alert-card">
+      <div class="alert-card" data-id="${escapeHtml(m.id)}">
         <div class="alert-main">
           <span class="alert-species">Conus ${escapeHtml(m.species)}</span>
           <span class="alert-meta">
@@ -104,8 +124,19 @@ function renderAlerts(data) {
         </div>
         <span class="alert-price">${escapeHtml(String(m.price))} ${escapeHtml(m.currency || "€")}</span>
         <a class="alert-link" href="${escapeHtml(m.url)}" target="_blank" rel="noopener">Voir l'annonce ↗</a>
+        <button class="alert-dismiss" data-dismiss-id="${escapeHtml(m.id)}" aria-label="Supprimer cette annonce" title="Supprimer">✕</button>
       </div>
     `).join("");
+
+    list.querySelectorAll("[data-dismiss-id]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.dismissId;
+        dismissAlert(id);
+        const card = list.querySelector(`.alert-card[data-id="${CSS.escape(id)}"]`);
+        if (card) card.remove();
+        if (!list.children.length) empty.classList.remove("hidden");
+      });
+    });
   }
 
   if (data.checkedAt) {
