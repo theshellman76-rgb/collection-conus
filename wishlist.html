@@ -9,16 +9,24 @@
 </head>
 <body>
 
-<nav class="top-nav">
-  <a href="index.html">Collection</a>
-  <a href="wishlist.html" class="active">Wishlist</a>
-</nav>
-
 <header class="site-header wishlist-header">
   <div class="header-content">
     <p class="eyebrow">Catalogue privé · Conidae</p>
     <h1 class="site-title">Ma<br><em>Wishlist</em></h1>
     <p class="site-sub">Les espèces qu'il me manque, avec un prix limite. Une veille automatique surveille eBay et shellauction.net et alerte ici et par e-mail dès qu'une correspondance apparaît.</p>
+  </div>
+  <div class="header-logo" aria-hidden="false">
+    <img src="logo.jpg" alt="Logo Conus milneedwardsi" loading="eager">
+    <div class="hamburger-wrap">
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="hamburger-menu" id="hamburger-menu">
+        <a href="index.html" data-page="index">Collection</a>
+        <a href="wishlist.html" data-page="wishlist">Wishlist</a>
+        <a href="profil.html" data-page="profil">Profil</a>
+      </nav>
+    </div>
   </div>
 </header>
 
@@ -44,6 +52,7 @@
   <span id="last-check"></span>
 </footer>
 
+<script src="nav.js"></script>
 <script src="wishlist.js"></script>
 </body>
 </html>
