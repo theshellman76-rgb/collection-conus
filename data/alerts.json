@@ -1,4 +1,41 @@
 {
-  "checkedAt": null,
-  "matches": []
+  "checkedAt": "2026-08-05T22:40:19.342Z",
+  "matches": [
+    {
+      "source": "eBay",
+      "id": "ebay-v1|188044995868|0",
+      "title": "CONUS CEDONULLI Grenadines 47.4mm Shell Shell # (774)",
+      "price": 69.19,
+      "currency": "USD",
+      "url": "https://www.ebay.com/itm/188044995868?_skw=Conus+cedonulli&hash=item2bc85aed1c:g:~IgAAeSwWKxpixVt",
+      "tailleVue": 47.4,
+      "qualiteVue": null,
+      "species": "cedonulli",
+      "limit": 150
+    },
+    {
+      "source": "eBay",
+      "id": "ebay-v1|188044994605|0",
+      "title": "CONUS CEDONULLI Grenadines 48.1mm Shell Shell # (765)",
+      "price": 57.66,
+      "currency": "USD",
+      "url": "https://www.ebay.com/itm/188044994605?_skw=Conus+cedonulli&hash=item2bc85ae82d:g:CE8AAeSwZvVpixTv",
+      "tailleVue": 48.1,
+      "qualiteVue": null,
+      "species": "cedonulli",
+      "limit": 150
+    },
+    {
+      "source": "eBay",
+      "id": "ebay-v1|264587166563|0",
+      "title": "Cypraea cervus",
+      "price": 25,
+      "currency": "EUR",
+      "url": "https://www.ebay.fr/itm/264587166563?_skw=Conus+cervus&hash=item3d9a9fc363:g:uPEAAOSwsgFdL0r1",
+      "tailleVue": null,
+      "qualiteVue": null,
+      "species": "cervus",
+      "limit": 250
+    }
+  ]
 }
