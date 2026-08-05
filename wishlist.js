@@ -4,6 +4,7 @@
 const WISHLIST_SHEET_ID = "1BpqkgqTauBjtFxRBPprYVuNvamS9WVMAtymQh8iQSQA";
 const WISHLIST_CSV_URL = `https://docs.google.com/spreadsheets/d/${WISHLIST_SHEET_ID}/gviz/tq?tqx=out:csv`;
 const ALERTS_JSON_URL = "data/alerts.json";
+const HISTORY_JSON_URL = "data/price-history.json";
 
 // ============================================================
 // CSV PARSING (identique au site principal)
@@ -34,6 +35,34 @@ function escapeHtml(str) {
 }
 
 // ============================================================
+// HISTORIQUE DES PRIX
+// ============================================================
+function normalize(str) {
+  return (str || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+}
+
+async function loadHistory() {
+  try {
+    const res = await fetch(HISTORY_JSON_URL, { cache: "no-store" });
+    if (!res.ok) return {};
+    return await res.json();
+  } catch (e) {
+    return {};
+  }
+}
+
+function historyHtmlFor(history, speciesName) {
+  const entries = history[normalize(speciesName)];
+  if (!entries || !entries.length) return "";
+  const last = entries.slice(-5).reverse();
+  const items = last.map(e => {
+    const d = new Date(e.date).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" });
+    return `<span class="history-point">${d} : ${escapeHtml(String(e.price))} ${escapeHtml(e.currency || "")}</span>`;
+  }).join("");
+  return `<div class="wish-history"><p class="wish-history-label">Derniers prix vus</p>${items}</div>`;
+}
+
+// ============================================================
 // WISHLIST
 // ============================================================
 async function loadWishlist() {
@@ -45,15 +74,19 @@ async function loadWishlist() {
     nom: header.indexOf("conus") >= 0 ? header.indexOf("conus") : header.indexOf("nom"),
     prix: header.indexOf("prix"),
     notes: header.indexOf("notes"),
+    tailleMin: header.indexOf("taille min"),
+    qualiteMin: header.indexOf("qualité min") >= 0 ? header.indexOf("qualité min") : header.indexOf("qualite min"),
   };
   return rows.slice(1).map(r => ({
     nom: (r[idx.nom] || "").trim(),
     prix: idx.prix >= 0 ? (r[idx.prix] || "").trim() : "",
     notes: idx.notes >= 0 ? (r[idx.notes] || "").trim() : "",
+    tailleMin: idx.tailleMin >= 0 ? (r[idx.tailleMin] || "").trim() : "",
+    qualiteMin: idx.qualiteMin >= 0 ? (r[idx.qualiteMin] || "").trim() : "",
   })).filter(w => w.nom);
 }
 
-function renderWishlist(items) {
+function renderWishlist(items, history) {
   const grid = document.getElementById("wishlist-grid");
   document.getElementById("wishlist-loading").classList.add("hidden");
   if (!items.length) {
@@ -64,7 +97,9 @@ function renderWishlist(items) {
     <article class="wish-card">
       <h3 class="wish-name">Conus ${escapeHtml(w.nom)}</h3>
       ${w.prix ? `<p class="wish-limit">Prix limite : ${escapeHtml(w.prix)} €</p>` : ""}
+      ${(w.tailleMin || w.qualiteMin) ? `<p class="wish-criteria">${w.tailleMin ? `≥ ${escapeHtml(w.tailleMin)} mm` : ""}${w.tailleMin && w.qualiteMin ? " · " : ""}${w.qualiteMin ? `qualité ≥ ${escapeHtml(w.qualiteMin)}` : ""}</p>` : ""}
       ${w.notes ? `<p class="wish-notes">${escapeHtml(w.notes)}</p>` : ""}
+      ${historyHtmlFor(history, w.nom)}
     </article>
   `).join("");
 }
@@ -150,11 +185,12 @@ function renderAlerts(data) {
 // INIT
 // ============================================================
 async function init() {
-  const [wishlist, alerts] = await Promise.all([
+  const [wishlist, alerts, history] = await Promise.all([
     loadWishlist().catch(() => []),
     loadAlerts(),
+    loadHistory(),
   ]);
-  renderWishlist(wishlist);
+  renderWishlist(wishlist, history);
   renderAlerts(alerts);
 }
 

@@ -135,6 +135,11 @@ async function loadData() {
     photo1: header.indexOf("photos1"),
     photo2: header.indexOf("photos2"),
     favoris: header.indexOf("favoris"),
+    prixAchat: header.indexOf("prix achat"),
+    dateAcquisition: header.indexOf("date acquisition"),
+    rarete: header.indexOf("rareté") >= 0 ? header.indexOf("rareté") : header.indexOf("rarete"),
+    statut: header.indexOf("statut"),
+    prixSouhaite: header.indexOf("prix souhaité") >= 0 ? header.indexOf("prix souhaité") : header.indexOf("prix souhaite"),
   };
 
   const nextPhoto = buildPhotoIndex();
@@ -154,6 +159,11 @@ async function loadData() {
       photo1: nextPhoto(photo1Base),
       photo2: nextPhoto(photo2Base),
       favori: idx.favoris >= 0 && (r[idx.favoris] || "").trim().toLowerCase() === "oui",
+      prixAchat: idx.prixAchat >= 0 ? parseFloat((r[idx.prixAchat] || "").replace(",", ".")) || null : null,
+      dateAcquisition: idx.dateAcquisition >= 0 ? (r[idx.dateAcquisition] || "").trim() : "",
+      rarete: idx.rarete >= 0 ? (r[idx.rarete] || "").trim() : "",
+      statut: idx.statut >= 0 ? ((r[idx.statut] || "").trim() || "Collection") : "Collection",
+      prixSouhaite: idx.prixSouhaite >= 0 ? parseFloat((r[idx.prixSouhaite] || "").replace(",", ".")) || null : null,
     };
   }).filter(s => s.nom);
 
@@ -222,6 +232,8 @@ function renderGrid(list) {
           <span>${escapeHtml(s.origine || "—")}</span>
           ${s.taille ? `<span>${escapeHtml(s.taille)} mm</span>` : ""}
           ${s.qualite ? `<span class="tag-quality">${escapeHtml(s.qualite)}</span>` : ""}
+          ${s.rarete ? `<span class="tag-rarete">${escapeHtml(s.rarete)}</span>` : ""}
+          ${s.statut && s.statut !== "Collection" ? `<span class="tag-statut">${escapeHtml(s.statut)}</span>` : ""}
         </p>
       </div>
     </article>
@@ -250,6 +262,21 @@ function openModal(s) {
   document.getElementById("modal-taille").textContent = s.taille ? s.taille + " mm" : "—";
   document.getElementById("modal-qualite").textContent = s.qualite || "—";
   document.getElementById("modal-auteur").textContent = s.auteur || "—";
+
+  const rareteWrap = document.getElementById("modal-rarete-wrap");
+  if (s.rarete) { rareteWrap.classList.remove("hidden"); document.getElementById("modal-rarete").textContent = s.rarete; }
+  else rareteWrap.classList.add("hidden");
+
+  const dateWrap = document.getElementById("modal-date-wrap");
+  if (s.dateAcquisition) { dateWrap.classList.remove("hidden"); document.getElementById("modal-date").textContent = s.dateAcquisition; }
+  else dateWrap.classList.add("hidden");
+
+  const statutWrap = document.getElementById("modal-statut-wrap");
+  if (s.statut && s.statut !== "Collection") {
+    statutWrap.classList.remove("hidden");
+    document.getElementById("modal-statut").textContent = s.statut + (s.prixSouhaite ? ` — ${s.prixSouhaite} €` : "");
+  } else statutWrap.classList.add("hidden");
+
   document.getElementById("modal").classList.add("open");
 }
 function closeModal() { document.getElementById("modal").classList.remove("open"); }
@@ -342,6 +369,9 @@ function updateStats() {
   document.getElementById("stat-total").textContent = ALL_SPECIMENS.length;
   document.getElementById("stat-species").textContent = new Set(ALL_SPECIMENS.map(s => s.nom.split(" f.")[0].split(" f ")[0])).size;
   document.getElementById("stat-origins").textContent = new Set(ALL_SPECIMENS.map(s => s.origine).filter(Boolean)).size;
+  const total = ALL_SPECIMENS.reduce((sum, s) => sum + (s.prixAchat || 0), 0);
+  document.getElementById("stat-value").textContent =
+    total > 0 ? total.toLocaleString("fr-FR", { maximumFractionDigits: 0 }) + " €" : "—";
 }
 
 // ============================================================

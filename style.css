@@ -396,6 +396,27 @@ main{padding:2.6rem 6vw 6rem;}
   display:flex; align-items:center; justify-content:center;
 }
 .card-fav svg{width:14px; height:14px; fill:var(--brass-bright);}
+.card-statut-corner{
+  position:absolute; top:0.5rem; right:0.5rem; z-index:2;
+  font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.04em; text-transform:uppercase;
+  background:#c0392b; color:#fff;
+  padding:0.25em 0.6em; border-radius:2px;
+}
+.card-meta .tag-rarete{
+  color:var(--text-ink);
+  background:rgba(90,83,70,0.14);
+  padding:0.08em 0.5em;
+  border-radius:2px;
+}
+.card-meta .tag-statut{
+  color:#fff;
+  background:#c0392b;
+  padding:0.08em 0.5em;
+  border-radius:2px;
+  text-transform:uppercase;
+  letter-spacing:0.03em;
+  font-size:0.62rem;
+}
 .card-photos{
   display:flex;
   aspect-ratio:2/1.15;
@@ -658,7 +679,25 @@ footer{
 .wish-limit{
   font-family:var(--font-mono); font-size:0.78rem; color:var(--brass-bright);
 }
+.wish-criteria{
+  font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted);
+  margin-top:0.2rem;
+}
 .wish-notes{
   font-family:var(--font-body); font-size:0.82rem; color:var(--text-muted);
   margin-top:0.5rem;
+}
+.wish-history{
+  margin-top:0.7rem;
+  padding-top:0.6rem;
+  border-top:1px solid var(--line);
+}
+.wish-history-label{
+  font-family:var(--font-mono); font-size:0.64rem; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--text-muted); margin:0 0 0.35rem;
+}
+.history-point{
+  display:block;
+  font-family:var(--font-mono); font-size:0.72rem; color:var(--text-warm);
+  line-height:1.6;
 }

@@ -12,6 +12,8 @@ const EBAY_MARKETPLACES = ["EBAY_US", "EBAY_FR", "EBAY_DE", "EBAY_GB"];
 const DATA_DIR = path.join(__dirname, "..", "data");
 const ALERTS_PATH = path.join(DATA_DIR, "alerts.json");
 const SEEN_PATH = path.join(DATA_DIR, "seen.json");
+const HISTORY_PATH = path.join(DATA_DIR, "price-history.json");
+const MAX_HISTORY_PER_SPECIES = 200;
 const MAX_SEEN = 500;
 const MAX_ALERTS_DISPLAYED = 60;
 
@@ -67,10 +69,33 @@ async function loadWishlist() {
   const header = rows[0].map(h => h.trim().toLowerCase());
   const idxNom = header.indexOf("conus") >= 0 ? header.indexOf("conus") : header.indexOf("nom");
   const idxPrix = header.indexOf("prix");
+  const idxTailleMin = header.indexOf("taille min");
+  const idxQualiteMin = header.indexOf("qualité min") >= 0 ? header.indexOf("qualité min") : header.indexOf("qualite min");
   return rows.slice(1).map(r => ({
     nom: (r[idxNom] || "").trim(),
     prixLimite: parseFloat((r[idxPrix] || "").replace(",", ".")) || null,
+    tailleMin: idxTailleMin >= 0 ? (parseFloat((r[idxTailleMin] || "").replace(",", ".")) || null) : null,
+    qualiteMin: idxQualiteMin >= 0 ? (r[idxQualiteMin] || "").trim() : "",
   })).filter(w => w.nom);
+}
+
+// Échelle de qualité utilisée par les collectionneurs de coquillages, du moins bon au meilleur.
+const QUALITY_SCALE = ["F", "F+", "F++", "F+++", "GEM"];
+function qualityRank(q) {
+  const idx = QUALITY_SCALE.indexOf((q || "").trim().toUpperCase());
+  return idx === -1 ? null : idx;
+}
+
+// Best effort : essaie d'extraire une taille (mm) et une qualité depuis le titre libre
+// d'une annonce eBay/shellauction. Les vendeurs n'utilisent aucun format standard,
+// donc ceci peut échouer à repérer l'info même quand elle est présente dans le titre.
+function extractSizeFromTitle(title) {
+  const m = (title || "").match(/(\d{1,3}(?:[.,]\d{1,2})?)\s*mm/i);
+  return m ? parseFloat(m[1].replace(",", ".")) : null;
+}
+function extractQualityFromTitle(title) {
+  const m = (title || "").match(/\bF\+{0,3}(?![+\w])|\bGEM\b/i);
+  return m ? m[0].toUpperCase() : null;
 }
 
 // ------------------------------------------------------------
@@ -226,6 +251,24 @@ async function main() {
       return f.price <= item.prixLimite;
     });
 
+    // Taille et qualité : extraction "best effort" depuis le titre (pas de champ structuré
+    // chez ces vendeurs). En l'absence d'info repérable dans le titre, on laisse passer
+    // l'annonce plutôt que de risquer de rater une bonne trouvaille.
+    found = found.map(f => ({
+      ...f,
+      tailleVue: extractSizeFromTitle(f.title),
+      qualiteVue: extractQualityFromTitle(f.title),
+    }));
+    found = found.filter(f => {
+      if (item.tailleMin != null && f.tailleVue != null && f.tailleVue < item.tailleMin) return false;
+      if (item.qualiteMin && f.qualiteVue) {
+        const seuil = qualityRank(item.qualiteMin);
+        const vue = qualityRank(f.qualiteVue);
+        if (seuil != null && vue != null && vue < seuil) return false;
+      }
+      return true;
+    });
+
     found.forEach(f => allMatches.push({ ...f, species: item.nom, limit: item.prixLimite }));
   }
 
@@ -268,6 +311,20 @@ async function main() {
     checkedAt: new Date().toISOString(),
     matches: displayed,
   }, null, 2));
+
+  // Historique des prix vus par espèce (pour le graphique sur la page Wishlist)
+  const history = readJsonSafe(HISTORY_PATH, {});
+  const checkedAt = new Date().toISOString();
+  dedupedMatches.forEach(m => {
+    if (m.price == null) return;
+    const key = normalize(m.species);
+    if (!history[key]) history[key] = [];
+    history[key].push({ date: checkedAt, price: m.price, currency: m.currency, source: m.source });
+    if (history[key].length > MAX_HISTORY_PER_SPECIES) {
+      history[key] = history[key].slice(-MAX_HISTORY_PER_SPECIES);
+    }
+  });
+  fs.writeFileSync(HISTORY_PATH, JSON.stringify(history, null, 2));
 
   console.log(`Terminé. ${dedupedMatches.length} correspondance(s) active(s), ${newMatches.length} nouvelle(s).`);
 }

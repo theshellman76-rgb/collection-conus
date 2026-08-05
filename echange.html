@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Échange & Vente — Conus</title>
+<meta name="description" content="Spécimens Conus à échanger ou à vendre.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header wishlist-header">
+  <div class="header-content">
+    <p class="eyebrow">Catalogue privé · Conidae</p>
+    <h1 class="site-title">Échange<br><em>& Vente</em></h1>
+    <p class="site-sub">Spécimens en double ou dont je souhaite me séparer — prix indicatif, à discuter.</p>
+  </div>
+  <div class="header-logo" aria-hidden="false">
+    <img src="logo.jpg" alt="Logo Conus milneedwardsi" loading="eager">
+    <div class="hamburger-wrap">
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="hamburger-menu" id="hamburger-menu">
+        <a href="index.html" data-page="index">Collection</a>
+        <a href="wishlist.html" data-page="wishlist">Wishlist</a>
+        <a href="echange.html" data-page="echange">Échange & Vente</a>
+        <a href="profil.html" data-page="profil">Profil</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="wishlist-main">
+  <div id="echange-loading" class="muted-note">Chargement…</div>
+  <div id="echange-empty" class="muted-note hidden">Rien à échanger ou à vendre pour le moment.</div>
+  <div class="grid" id="echange-grid"></div>
+</main>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <button class="modal-close" id="modal-close" aria-label="Fermer">✕</button>
+    <div class="modal-photos" id="modal-photos"></div>
+    <div class="modal-body">
+      <p class="modal-label" id="modal-label">Spécimen</p>
+      <h2 class="modal-name" id="modal-name"></h2>
+      <dl class="modal-grid">
+        <div class="modal-field"><dt>Origine</dt><dd id="modal-origine"></dd></div>
+        <div class="modal-field"><dt>Taille</dt><dd id="modal-taille"></dd></div>
+        <div class="modal-field"><dt>État</dt><dd id="modal-qualite"></dd></div>
+        <div class="modal-field"><dt>Auteur</dt><dd id="modal-auteur"></dd></div>
+        <div class="modal-field"><dt id="modal-statut-label">Statut</dt><dd id="modal-statut"></dd></div>
+        <div class="modal-field hidden" id="modal-prix-wrap"><dt>Prix souhaité</dt><dd id="modal-prix"></dd></div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<script src="nav.js"></script>
+<script src="echange.js"></script>
+</body>
+</html>
