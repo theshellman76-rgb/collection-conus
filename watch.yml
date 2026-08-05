@@ -1,0 +1,45 @@
+name: Veille Wishlist Conus
+
+on:
+  schedule:
+    # 07h00 et 19h00 UTC (~08-09h et 20-21h en France selon l'heure d'été/hiver)
+    - cron: "0 7 * * *"
+    - cron: "0 19 * * *"
+  workflow_dispatch: {} # permet de lancer manuellement depuis l'onglet Actions
+
+permissions:
+  contents: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Installer les dépendances
+        working-directory: scripts
+        run: npm install
+
+      - name: Lancer la veille
+        working-directory: scripts
+        env:
+          EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
+          EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          ALERT_TO_EMAIL: ${{ secrets.ALERT_TO_EMAIL }}
+        run: node watch.js
+
+      - name: Enregistrer les résultats dans le dépôt
+        run: |
+          git config user.name "Veille Conus"
+          git config user.email "action@github.com"
+          git add data/alerts.json data/seen.json data/price-history.json
+          git diff --quiet --cached || git commit -m "Mise à jour de la veille wishlist"
+          git push
