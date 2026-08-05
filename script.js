@@ -112,6 +112,7 @@ function countryToContinent(country) {
 let ALL_SPECIMENS = [];
 let currentSort = { key: null, dir: 1 };
 let currentLetter = "";
+let currentContinent = "";
 let showFavoritesOnly = false;
 
 function normalizeLetter(str) {
@@ -295,6 +296,7 @@ function applyFilters() {
     if (quality && s.qualite !== quality) return false;
     if (author && s.auteurCourt !== author) return false;
     if (currentLetter && normalizeLetter(s.nom) !== currentLetter) return false;
+    if (currentContinent && countryToContinent(s.pays) !== currentContinent) return false;
     if (showFavoritesOnly && !s.favori) return false;
     if (q) {
       const hay = `${s.nom} ${s.origine} ${s.auteur}`.toLowerCase();
@@ -365,6 +367,20 @@ function updateWorldMap() {
   });
 }
 
+function wireWorldMapClicks() {
+  document.querySelectorAll(".continent-badge").forEach(badge => {
+    badge.style.cursor = "pointer";
+    badge.addEventListener("click", () => {
+      const continent = badge.dataset.continent;
+      currentContinent = currentContinent === continent ? "" : continent;
+      document.querySelectorAll(".continent-badge").forEach(b =>
+        b.classList.toggle("active", b.dataset.continent === currentContinent)
+      );
+      applyFilters();
+    });
+  });
+}
+
 function updateStats() {
   document.getElementById("stat-total").textContent = ALL_SPECIMENS.length;
   document.getElementById("stat-species").textContent = new Set(ALL_SPECIMENS.map(s => s.nom.split(" f.")[0].split(" f ")[0])).size;
@@ -413,6 +429,7 @@ async function init() {
   populateAlphaBar();
   updateStats();
   updateWorldMap();
+  wireWorldMapClicks();
   applyFilters();
 
   document.getElementById("last-updated").textContent =
