@@ -34,6 +34,14 @@ function escapeHtml(str) {
   return (str || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
+function normalizeStatut(str) {
+  return (str || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+}
+function isForTradeOrSale(statut) {
+  const n = normalizeStatut(statut);
+  return n.includes("echang") || n.includes("vendre") || n.includes("vente");
+}
+
 // Même calcul de nom de fichier photo que le site principal (voir script.js)
 function buildPhotoIndex() {
   const cursors = {};
@@ -110,7 +118,7 @@ async function loadData() {
       statut,
       prixSouhaite: idx.prixSouhaite >= 0 ? parseFloat((r[idx.prixSouhaite] || "").replace(",", ".")) || null : null,
     };
-  }).filter(s => s.nom && (s.statut.toLowerCase() === "à échanger" || s.statut.toLowerCase() === "à vendre"));
+  }).filter(s => s.nom && isForTradeOrSale(s.statut));
 }
 
 function renderGrid(list) {
