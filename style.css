@@ -50,14 +50,14 @@ body{
 .header-content{position:relative; min-width:0;}
 
 .world-map-inline{
-  width:460px;
-  max-width:38vw;
+  width:300px;
+  max-width:30vw;
   justify-self:center;
 }
 .world-map-inline .world-eyebrow{
   font-family:var(--font-mono);
-  font-size:0.72rem;
-  letter-spacing:0.18em;
+  font-size:0.6rem;
+  letter-spacing:0.14em;
   text-transform:uppercase;
   color:var(--brass-bright);
   margin:0 0 0.7rem;
@@ -76,27 +76,37 @@ body{
 }
 .header-logo img{width:100%; height:auto; display:block; border-radius:50%;}
 
-.hamburger-wrap{position:relative;}
+.hamburger-wrap{position:relative; align-self:stretch;}
 .hamburger-btn{
-  width:38px; height:30px;
+  width:100%; height:36px;
   background:transparent;
   border:1px solid var(--line);
   border-radius:3px;
   cursor:pointer;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:5px;
+  display:flex; flex-direction:row; align-items:center; justify-content:center;
+  gap:0.6rem;
   transition:border-color .15s, background .15s;
 }
 .hamburger-btn:hover{border-color:var(--brass);}
-.hamburger-btn span{
+.hamburger-icon{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:5px;
+}
+.hamburger-icon span{
   width:18px; height:2px;
   background:var(--text-muted);
   transition:background .15s, transform .2s, opacity .2s;
 }
-.hamburger-btn:hover span{background:var(--text-warm);}
-.hamburger-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-.hamburger-btn[aria-expanded="true"] span:nth-child(2){opacity:0;}
-.hamburger-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.hamburger-text{
+  font-family:var(--font-mono); font-size:0.78rem; letter-spacing:0.04em;
+  color:var(--text-muted);
+  transition:color .15s;
+}
+.hamburger-btn:hover .hamburger-icon span{background:var(--text-warm);}
+.hamburger-btn:hover .hamburger-text{color:var(--text-warm);}
+.hamburger-btn[aria-expanded="true"] .hamburger-icon span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger-btn[aria-expanded="true"] .hamburger-icon span:nth-child(2){opacity:0;}
+.hamburger-btn[aria-expanded="true"] .hamburger-icon span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 
 .hamburger-menu{
   position:absolute;
@@ -164,6 +174,10 @@ body{
   letter-spacing:-0.01em;
   position:relative;
 }
+.site-title-compact{
+  margin:0 0 1.4rem;
+}
+.site-title-compact em{color:var(--brass-bright); font-style:italic;}
 .site-title em{
   color:var(--brass-bright);
   font-style:italic;
