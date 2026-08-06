@@ -30,6 +30,15 @@
       if (!menu.contains(e.target) && e.target !== btn) close();
     });
     document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+
+    const logoutLink = document.getElementById("logout-link");
+    if (logoutLink && typeof lockOut === "function") {
+      logoutLink.addEventListener("click", e => {
+        e.preventDefault();
+        lockOut();
+        location.href = "index.html";
+      });
+    }
   }
 
   if (document.readyState === "loading") {

@@ -6,6 +6,8 @@
 <title>Échange & Vente — Conus</title>
 <meta name="description" content="Spécimens Conus à échanger ou à vendre.">
 <link rel="stylesheet" href="style.css">
+<script src="auth.js"></script>
+<script>requireAuth();</script>
 </head>
 <body>
 
@@ -21,10 +23,11 @@
         <span></span><span></span><span></span>
       </button>
       <nav class="hamburger-menu" id="hamburger-menu">
-        <a href="index.html" data-page="index">Collection</a>
+        <a href="collection.html" data-page="collection">Collection</a>
         <a href="wishlist.html" data-page="wishlist">Wishlist</a>
         <a href="echange.html" data-page="echange">Échange & Vente</a>
         <a href="profil.html" data-page="profil">Profil</a>
+        <a href="#" id="logout-link">Se déconnecter</a>
       </nav>
     </div>
     <img src="logo.jpg" alt="Logo Conus milneedwardsi" loading="eager">

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conus — Collection</title>
+<meta name="description" content="Collection de coquillages Conus — catalogue en ligne.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-content">
+    <p class="eyebrow">Catalogue privé · Conidae</p>
+    <h1 class="site-title">Collection<br><em>Conus</em></h1>
+    <p class="site-sub">Un inventaire de coquillages du genre <em style="font-style:italic">Conus</em>, réunis au fil des trouvailles — origine, taille, état de conservation et référence de l'auteur pour chaque spécimen.</p>
+    <div class="header-stats">
+      <div class="stat"><span class="stat-num" id="stat-total">—</span><span class="stat-label">Spécimens</span></div>
+      <div class="stat"><span class="stat-num" id="stat-species">—</span><span class="stat-label">Espèces</span></div>
+      <div class="stat"><span class="stat-num" id="stat-origins">—</span><span class="stat-label">Provenances</span></div>
+      <div class="stat"><span class="stat-num" id="stat-value">—</span><span class="stat-label">Valeur (achat)</span></div>
+    </div>
+  </div>
+
+  <div class="world-map-inline">
+    <p class="world-eyebrow">Répartition géographique</p>
+    <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+      <!-- silhouettes stylisées, pas une projection exacte -->
+      <g fill="var(--ink-3)" stroke="var(--brass)" stroke-width="1.2" opacity="0.9">
+        <!-- Amériques -->
+        <path d="M 95 40 C 130 30, 165 45, 170 80 C 178 100, 155 115, 165 140
+                 C 178 165, 150 190, 160 220 C 168 250, 130 260, 135 290
+                 C 140 315, 115 330, 108 300 C 100 270, 118 250, 105 225
+                 C 92 200, 115 180, 100 155 C 88 135, 108 115, 95 90
+                 C 85 70, 80 50, 95 40 Z"/>
+        <!-- Europe -->
+        <path d="M 370 55 C 395 45, 420 55, 425 75 C 430 95, 410 100, 415 115
+                 C 418 128, 395 130, 385 118 C 372 122, 360 110, 365 95
+                 C 355 85, 358 65, 370 55 Z"/>
+        <!-- Afrique -->
+        <path d="M 380 140 C 415 128, 450 140, 455 170 C 462 195, 445 210, 450 235
+                 C 455 265, 430 300, 405 320 C 388 332, 375 315, 380 290
+                 C 365 275, 368 245, 358 220 C 348 195, 360 165, 380 140 Z"/>
+        <!-- Asie -->
+        <path d="M 445 55 C 500 35, 580 45, 630 70 C 670 88, 690 115, 665 140
+                 C 690 155, 675 180, 640 175 C 615 195, 580 185, 560 165
+                 C 530 175, 505 155, 500 130 C 470 120, 450 95, 445 55 Z"/>
+        <!-- Océanie -->
+        <path d="M 620 235 C 655 222, 695 232, 705 255 C 715 275, 695 295, 665 292
+                 C 640 300, 615 285, 615 262 C 610 248, 610 240, 620 235 Z"/>
+      </g>
+      <!-- badges -->
+      <g class="continent-badge" data-continent="amerique">
+        <circle cx="130" cy="180" r="30"/>
+        <text class="badge-num" id="count-amerique" x="130" y="175">—</text>
+        <text class="badge-label" x="130" y="222">Amériques</text>
+      </g>
+      <g class="continent-badge" data-continent="europe">
+        <circle cx="393" cy="88" r="26"/>
+        <text class="badge-num" id="count-europe" x="393" y="83">—</text>
+        <text class="badge-label" x="393" y="128">Europe</text>
+      </g>
+      <g class="continent-badge" data-continent="afrique">
+        <circle cx="410" cy="222" r="32"/>
+        <text class="badge-num" id="count-afrique" x="410" y="217">—</text>
+        <text class="badge-label" x="410" y="268">Afrique</text>
+      </g>
+      <g class="continent-badge" data-continent="asie">
+        <circle cx="565" cy="120" r="34"/>
+        <text class="badge-num" id="count-asie" x="565" y="115">—</text>
+        <text class="badge-label" x="565" y="168">Asie</text>
+      </g>
+      <g class="continent-badge" data-continent="oceanie">
+        <circle cx="660" cy="260" r="28"/>
+        <text class="badge-num" id="count-oceanie" x="660" y="255">—</text>
+        <text class="badge-label" x="660" y="302">Océanie</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="header-logo" aria-hidden="false">
+    <img src="logo.jpg" alt="Logo Conus milneedwardsi" loading="eager">
+  </div>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="6.5"/><path d="M14 14l4 4"/></svg>
+    <input type="text" id="search" placeholder="Rechercher un nom, une origine, un auteur…">
+  </div>
+  <select id="filter-origin"><option value="">Toutes provenances</option></select>
+  <select id="filter-quality"><option value="">Tous états</option></select>
+  <select id="filter-author"><option value="">Tous auteurs</option></select>
+  <button id="btn-favorites" class="fav-toggle" aria-pressed="false">
+    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5l1.9 4.3 4.6.4-3.5 3.1 1.1 4.6L8 11.6l-4.1 2.3 1.1-4.6-3.5-3.1 4.6-.4z"/></svg>
+    Favoris
+  </button>
+  <div class="view-toggle">
+    <button id="btn-grid" class="active" aria-pressed="true">
+      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="1" y="9" width="6" height="6"/><rect x="9" y="9" width="6" height="6"/></svg>
+      Grille
+    </button>
+    <button id="btn-table" aria-pressed="false">
+      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="2" width="14" height="2"/><rect x="1" y="7" width="14" height="2"/><rect x="1" y="12" width="14" height="2"/></svg>
+      Tableau
+    </button>
+  </div>
+  <span class="result-count" id="result-count"></span>
+</div>
+
+<div class="alpha-bar" id="alpha-bar"></div>
+
+<main>
+  <div id="loading">
+    <div class="spinner"></div>
+    Chargement du catalogue…
+  </div>
+  <div id="empty-state">Aucun spécimen ne correspond à cette recherche.</div>
+  <div class="grid hidden" id="grid-view"></div>
+  <div class="table-wrap hidden" id="table-view">
+    <table>
+      <thead>
+        <tr>
+          <th data-sort="thumb"></th>
+          <th data-sort="nom">Nom <span class="arrow"></span></th>
+          <th data-sort="origine">Origine <span class="arrow"></span></th>
+          <th data-sort="taille">Taille (mm) <span class="arrow"></span></th>
+          <th data-sort="qualite">État <span class="arrow"></span></th>
+          <th data-sort="auteur">Auteur <span class="arrow"></span></th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer>
+  <span>Collection Conus — catalogue généré depuis Google Sheets</span>
+  <span id="last-updated"></span>
+</footer>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <button class="modal-close" id="modal-close" aria-label="Fermer">✕</button>
+    <div class="modal-photos" id="modal-photos"></div>
+    <div class="modal-body">
+      <p class="modal-label" id="modal-label">Spécimen</p>
+      <h2 class="modal-name" id="modal-name"></h2>
+      <dl class="modal-grid">
+        <div class="modal-field"><dt>Origine</dt><dd id="modal-origine"></dd></div>
+        <div class="modal-field"><dt>Taille</dt><dd id="modal-taille"></dd></div>
+        <div class="modal-field"><dt>État</dt><dd id="modal-qualite"></dd></div>
+        <div class="modal-field"><dt>Auteur</dt><dd id="modal-auteur"></dd></div>
+        <div class="modal-field hidden" id="modal-rarete-wrap"><dt>Rareté</dt><dd id="modal-rarete"></dd></div>
+        <div class="modal-field hidden" id="modal-date-wrap"><dt>Date d'acquisition</dt><dd id="modal-date"></dd></div>
+        <div class="modal-field hidden" id="modal-statut-wrap"><dt>Statut</dt><dd id="modal-statut"></dd></div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

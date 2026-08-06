@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profil — Conus</title>
 <link rel="stylesheet" href="style.css">
+<script src="auth.js"></script>
+<script>requireAuth();</script>
 </head>
 <body>
 
@@ -20,10 +22,11 @@
         <span></span><span></span><span></span>
       </button>
       <nav class="hamburger-menu" id="hamburger-menu">
-        <a href="index.html" data-page="index">Collection</a>
+        <a href="collection.html" data-page="collection">Collection</a>
         <a href="wishlist.html" data-page="wishlist">Wishlist</a>
         <a href="echange.html" data-page="echange">Échange & Vente</a>
         <a href="profil.html" data-page="profil">Profil</a>
+        <a href="#" id="logout-link">Se déconnecter</a>
       </nav>
     </div>
     <img src="logo.jpg" alt="Logo Conus milneedwardsi" loading="eager">
@@ -31,9 +34,32 @@
 </header>
 
 <main class="wishlist-main">
-  <p class="muted-note">Dis-moi ce que tu veux mettre dans cette rubrique, et je la construis.</p>
+  <section class="alerts-section">
+    <p class="section-eyebrow">Lien de partage</p>
+    <p class="muted-note" style="padding-top:0">Ce lien montre ta collection à qui tu veux, sans mot de passe et sans accès au reste du site (pas de menu).</p>
+    <div class="share-link-row">
+      <input type="text" id="share-link-input" class="gate-input" readonly>
+      <button id="share-link-copy" class="gate-submit" type="button">Copier</button>
+    </div>
+    <p class="muted-note" id="share-link-copied" style="padding-top:0.4rem" hidden>Lien copié !</p>
+  </section>
+
+  <section class="wishlist-section">
+    <p class="section-eyebrow">Changer le mot de passe</p>
+    <p class="muted-note" style="padding-top:0">
+      ⚠️ Le site étant statique (sans serveur), ce changement n'est mémorisé que sur <strong>cet appareil et ce navigateur</strong> — les autres appareils garderont l'ancien mot de passe. Pour un changement valable partout, dis-le-moi directement et je le mets à jour dans le code.
+    </p>
+    <form id="password-form" class="gate-form" style="margin-top:1rem" autocomplete="off">
+      <label for="new-passcode" class="gate-label">Nouveau mot de passe (sur cet appareil)</label>
+      <input type="password" id="new-passcode" class="gate-input" placeholder="••••••••">
+      <button type="submit" class="gate-submit">Enregistrer sur cet appareil</button>
+      <p class="gate-error hidden" id="password-error"></p>
+      <p class="muted-note hidden" id="password-success" style="padding-top:0.2rem">Mot de passe mis à jour sur cet appareil.</p>
+    </form>
+  </section>
 </main>
 
 <script src="nav.js"></script>
+<script src="profil.js"></script>
 </body>
 </html>
