@@ -7,8 +7,8 @@ const PHOTOS_DIR = "photos/";
 const PHOTO_EXTENSIONS = ["JPG", "jpg", "JPEG", "jpeg", "PNG", "png"];
 const MAX_PREVIEW = 9;
 const FEATURED_SPECIES = [
-  "gloriamaris", "bengalensis", "milneedwarsii", "sumbawaensis",
-  "vicwei", "floccatus", "kolaceki", "scottjordani", "gauguini",
+  "gloriamaris", "bengalensis", "milneedwardsi", "sumbawaensis",
+  "vicweei", "floccatus", "kolaceki", "scottjordani", "gauguini",
 ];
 function normalizeName(str) {
   return (str || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
