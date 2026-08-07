@@ -11,43 +11,53 @@
 
 <header class="site-header">
   <div class="header-content">
-    <p class="eyebrow">Catalogue privé · Conidae</p>
-    <h1 class="site-title">Collection<br><em>Conus</em></h1>
-    <p class="site-sub">Un inventaire de coquillages du genre <em style="font-style:italic">Conus</em>, réunis au fil des trouvailles — origine, taille, état de conservation et référence de l'auteur pour chaque spécimen.</p>
+    <h1 class="site-title site-title-compact"><em>Conidae</em></h1>
     <div class="header-stats">
       <div class="stat"><span class="stat-num" id="stat-total">—</span><span class="stat-label">Spécimens</span></div>
       <div class="stat"><span class="stat-num" id="stat-species">—</span><span class="stat-label">Espèces</span></div>
       <div class="stat"><span class="stat-num" id="stat-origins">—</span><span class="stat-label">Provenances</span></div>
-      <div class="stat"><span class="stat-num" id="stat-value">—</span><span class="stat-label">Valeur (achat)</span></div>
-    </div>
+      </div>
   </div>
 
   <div class="world-map-inline">
-    <p class="world-eyebrow">Répartition géographique</p>
-    <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
       <!-- silhouettes stylisées, pas une projection exacte -->
       <g fill="var(--ink-3)" stroke="var(--brass)" stroke-width="1.2" opacity="0.9">
         <!-- Amériques -->
-        <path d="M 95 40 C 130 30, 165 45, 170 80 C 178 100, 155 115, 165 140
-                 C 178 165, 150 190, 160 220 C 168 250, 130 260, 135 290
-                 C 140 315, 115 330, 108 300 C 100 270, 118 250, 105 225
-                 C 92 200, 115 180, 100 155 C 88 135, 108 115, 95 90
-                 C 85 70, 80 50, 95 40 Z"/>
+        <path d="M 100 18 C 130 12, 165 20, 178 40 C 190 55, 175 70, 185 88
+                 C 196 100, 178 108, 165 100 C 150 92, 140 100, 148 118
+                 C 155 132, 140 145, 122 148 C 108 150, 100 140, 95 155
+                 C 90 168, 105 178, 118 190 C 140 205, 155 225, 158 250
+                 C 161 272, 150 290, 145 310 C 140 328, 125 335, 118 318
+                 C 112 302, 118 288, 108 275 C 96 262, 90 245, 92 228
+                 C 94 210, 80 200, 75 182 C 70 165, 82 150, 72 135
+                 C 63 120, 68 100, 60 85 C 54 68, 65 50, 75 35
+                 C 82 25, 92 20, 100 18 Z"/>
         <!-- Europe -->
-        <path d="M 370 55 C 395 45, 420 55, 425 75 C 430 95, 410 100, 415 115
-                 C 418 128, 395 130, 385 118 C 372 122, 360 110, 365 95
-                 C 355 85, 358 65, 370 55 Z"/>
+        <path d="M 380 45 C 390 40, 400 42, 405 50 C 410 58, 400 62, 405 70
+                 C 412 78, 425 75, 430 85 C 435 95, 425 100, 420 108
+                 C 424 118, 412 122, 408 112 C 400 122, 392 128, 385 120
+                 C 378 130, 368 122, 372 110 C 365 100, 358 90, 362 78
+                 C 358 65, 368 55, 375 50 C 372 45, 376 43, 380 45 Z"/>
         <!-- Afrique -->
-        <path d="M 380 140 C 415 128, 450 140, 455 170 C 462 195, 445 210, 450 235
-                 C 455 265, 430 300, 405 320 C 388 332, 375 315, 380 290
-                 C 365 275, 368 245, 358 220 C 348 195, 360 165, 380 140 Z"/>
+        <path d="M 390 128 C 420 122, 445 130, 455 150 C 462 162, 458 172, 450 178
+                 C 460 185, 468 195, 460 205 C 452 212, 445 205, 440 195
+                 C 445 210, 448 230, 442 250 C 436 270, 430 290, 418 305
+                 C 408 318, 398 328, 392 315 C 386 302, 394 292, 388 278
+                 C 380 265, 372 255, 368 240 C 362 225, 358 205, 362 188
+                 C 365 170, 358 155, 368 142 C 375 132, 383 128, 390 128 Z"/>
         <!-- Asie -->
-        <path d="M 445 55 C 500 35, 580 45, 630 70 C 670 88, 690 115, 665 140
-                 C 690 155, 675 180, 640 175 C 615 195, 580 185, 560 165
-                 C 530 175, 505 155, 500 130 C 470 120, 450 95, 445 55 Z"/>
+        <path d="M 520 55 C 560 40, 620 42, 660 55 C 685 65, 700 82, 690 100
+                 C 705 108, 715 120, 700 130 C 690 140, 675 135, 665 125
+                 C 660 145, 645 155, 625 150 C 615 165, 600 175, 585 165
+                 C 578 178, 565 185, 558 172 C 548 178, 538 170, 542 155
+                 C 545 145, 538 138, 530 142 C 520 148, 512 138, 515 125
+                 C 505 120, 498 108, 505 95 C 495 85, 500 70, 512 65
+                 C 508 58, 514 52, 520 55 Z"/>
         <!-- Océanie -->
-        <path d="M 620 235 C 655 222, 695 232, 705 255 C 715 275, 695 295, 665 292
-                 C 640 300, 615 285, 615 262 C 610 248, 610 240, 620 235 Z"/>
+        <path d="M 630 230 C 655 222, 685 225, 700 238 C 712 248, 710 262, 700 268
+                 C 705 278, 695 288, 680 290 C 665 295, 645 292, 630 285
+                 C 615 278, 608 262, 612 248 C 615 238, 622 232, 630 230 Z"/>
       </g>
       <!-- badges -->
       <g class="continent-badge" data-continent="amerique">
