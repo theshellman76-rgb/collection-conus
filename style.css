@@ -686,8 +686,9 @@ footer{
   color:var(--brass-bright); margin:0 0 1.2rem;
 }
 .gate-preview-grid{
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));
+  display:grid; grid-template-columns:repeat(3, 1fr);
   gap:1rem;
+  max-width:460px;
 }
 .gate-preview-card{
   background:var(--parchment);
@@ -707,6 +708,9 @@ footer{
 @media (max-width:800px){
   .gate-wrap{grid-template-columns:1fr;}
   .gate-right{border-left:none; border-top:1px solid var(--line); min-height:40vh;}
+}
+@media (max-width:420px){
+  .gate-preview-grid{grid-template-columns:repeat(2, 1fr);}
 }
 
 /* ---------- Wishlist page ---------- */
