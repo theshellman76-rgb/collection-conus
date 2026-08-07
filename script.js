@@ -386,8 +386,10 @@ function updateStats() {
   document.getElementById("stat-species").textContent = new Set(ALL_SPECIMENS.map(s => s.nom.split(" f.")[0].split(" f ")[0])).size;
   document.getElementById("stat-origins").textContent = new Set(ALL_SPECIMENS.map(s => s.origine).filter(Boolean)).size;
   const total = ALL_SPECIMENS.reduce((sum, s) => sum + (s.prixAchat || 0), 0);
-  document.getElementById("stat-value").textContent =
-    total > 0 ? total.toLocaleString("fr-FR", { maximumFractionDigits: 0 }) + " €" : "—";
+  const statValueEl = document.getElementById("stat-value");
+  if (statValueEl) {
+    statValueEl.textContent = total > 0 ? total.toLocaleString("fr-FR", { maximumFractionDigits: 0 }) + " €" : "—";
+  }
 }
 
 // ============================================================
