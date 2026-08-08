@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Préparer des photos — Conus</title>
+<link rel="stylesheet" href="style.css">
+<script src="auth.js"></script>
+<script>requireAuth();</script>
+</head>
+<body>
+
+<header class="site-header wishlist-header">
+  <div class="header-content">
+    <h1 class="site-title site-title-compact">Préparer<br><em>des photos</em></h1>
+    <p class="site-sub">Dépose tes photos brutes, corrige les noms si besoin, télécharge un zip prêt à glisser dans <code>photos/</code> sur GitHub. Tout se passe dans ton navigateur — aucune photo n'est envoyée où que ce soit.</p>
+  </div>
+  <div class="header-logo" aria-hidden="false">
+    <div class="hamburger-wrap">
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">
+        <span class="hamburger-icon"><span></span><span></span><span></span></span>
+        <span class="hamburger-text">Menu</span>
+      </button>
+      <nav class="hamburger-menu" id="hamburger-menu">
+        <a href="collection.html" data-page="collection">Collection</a>
+        <a href="wishlist.html" data-page="wishlist">Wishlist</a>
+        <a href="echange.html" data-page="echange">Échange & Vente</a>
+        <a href="photos.html" data-page="photos">Préparer des photos</a>
+        <a href="profil.html" data-page="profil">Profil</a>
+        <a href="#" id="logout-link">Se déconnecter</a>
+      </nav>
+    </div>
+    <img src="logo.jpg" alt="Logo Conus milneedwardsi" loading="eager">
+  </div>
+</header>
+
+<main class="wishlist-main">
+
+  <section class="dropzone-section">
+    <div id="dropzone" class="dropzone">
+      <p class="dropzone-label">Glisse tes photos ici, ou clique pour choisir des fichiers</p>
+      <p class="dropzone-sub">JPG, PNG — plusieurs fichiers à la fois</p>
+      <input type="file" id="file-input" accept="image/*" multiple hidden>
+    </div>
+  </section>
+
+  <section class="photo-queue-section hidden" id="queue-section">
+    <div class="queue-header">
+      <p class="section-eyebrow">Photos à préparer (<span id="queue-count">0</span>)</p>
+      <div class="queue-actions">
+        <button id="process-btn" class="gate-submit">Traiter les photos</button>
+        <button id="download-btn" class="gate-submit hidden" type="button">Télécharger le zip</button>
+        <button id="clear-btn" class="alert-dismiss-text" type="button">Tout effacer</button>
+      </div>
+    </div>
+    <p class="muted-note" id="queue-status" style="padding-top:0"></p>
+    <div class="photo-grid" id="photo-grid"></div>
+  </section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="nav.js"></script>
+<script src="photos.js"></script>
+</body>
+</html>
