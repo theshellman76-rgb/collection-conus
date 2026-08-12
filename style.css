@@ -766,7 +766,7 @@ footer{
   aspect-ratio:1/1.1;
   display:flex; flex-direction:column;
 }
-.gate-preview-card img{width:100%; flex:1; object-fit:contain; display:block; background:var(--parchment-2);}
+.gate-preview-card img{width:100%; flex:1; min-height:0; object-fit:contain; display:block; background:var(--parchment-2);}
 .gate-preview-card .no-photo{flex:1; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.6rem; color:var(--text-ink-muted);}
 .gate-preview-name{
   font-family:var(--font-display); font-style:italic; font-size:0.82rem;
