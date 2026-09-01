@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-08-31T19:03:35.071Z",
+  "checkedAt": "2026-09-01T07:02:47.215Z",
   "matches": [
     {
       "source": "eBay",
@@ -41,7 +41,7 @@
       "source": "eBay",
       "id": "ebay-v1|264587166563|0",
       "title": "Cypraea cervus",
-      "price": 25,
+      "price": 26.7,
       "currency": "EUR",
       "url": "https://www.ebay.fr/itm/264587166563?_skw=Conus+cervus&hash=item3d9a9fc363:g:uPEAAOSwsgFdL0r1",
       "tailleVue": null,
