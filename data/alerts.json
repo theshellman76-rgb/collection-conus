@@ -1,11 +1,11 @@
 {
-  "checkedAt": "2026-10-08T23:36:59.156Z",
+  "checkedAt": "2026-10-09T13:55:45.852Z",
   "matches": [
     {
       "source": "eBay",
       "id": "ebay-v1|205288613328|0",
       "title": "Conus (Stephanoconus) cedonulli dominicanus Caraïbes 38,9 mm - N°46",
-      "price": 35,
+      "price": 31.5,
       "currency": "EUR",
       "url": "https://www.ebay.fr/itm/205288613328?_skw=Conus+cedonulli&hash=item2fcc27a5d0:g:eb8AAOSwyoJnriLT",
       "tailleVue": 38.9,
@@ -17,7 +17,7 @@
       "source": "eBay",
       "id": "ebay-v1|167316921928|0",
       "title": "Conus (Stephanoconus) cedonulli dominicanus Caraïbes 35,6 mm - N°52",
-      "price": 30,
+      "price": 27,
       "currency": "EUR",
       "url": "https://www.ebay.fr/itm/167316921928?_skw=Conus+cedonulli&hash=item26f4dd9e48:g:tGUAAOSwD-pnsG6o",
       "tailleVue": 35.6,
@@ -29,7 +29,7 @@
       "source": "eBay",
       "id": "ebay-v1|167316945996|0",
       "title": "Conus (Stephanoconus) cedonulli dominicanus Caraïbes 38,9 mm - N°57",
-      "price": 30,
+      "price": 27,
       "currency": "EUR",
       "url": "https://www.ebay.fr/itm/167316945996?_skw=Conus+cedonulli&hash=item26f4ddfc4c:g:vUUAAOSwxt1nsHHF",
       "tailleVue": 38.9,
