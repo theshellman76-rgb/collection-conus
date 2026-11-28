@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-28T01:45:09.130Z",
+  "checkedAt": "2026-11-28T15:52:17.237Z",
   "matches": [
     {
       "source": "eBay",
@@ -15,24 +15,24 @@
     },
     {
       "source": "eBay",
-      "id": "ebay-v1|167316921928|0",
-      "title": "Conus (Stephanoconus) cedonulli dominicanus Caraïbes 35,6 mm - N°52",
-      "price": 30,
-      "currency": "EUR",
-      "url": "https://www.ebay.fr/itm/167316921928?_skw=Conus+cedonulli&hash=item26f4dd9e48:g:tGUAAOSwD-pnsG6o",
-      "tailleVue": 35.6,
-      "qualiteVue": null,
-      "species": "cedonulli",
-      "limit": 150
-    },
-    {
-      "source": "eBay",
       "id": "ebay-v1|167316945996|0",
       "title": "Conus (Stephanoconus) cedonulli dominicanus Caraïbes 38,9 mm - N°57",
       "price": 30,
       "currency": "EUR",
       "url": "https://www.ebay.fr/itm/167316945996?_skw=Conus+cedonulli&hash=item26f4ddfc4c:g:vUUAAOSwxt1nsHHF",
       "tailleVue": 38.9,
+      "qualiteVue": null,
+      "species": "cedonulli",
+      "limit": 150
+    },
+    {
+      "source": "eBay",
+      "id": "ebay-v1|167316921928|0",
+      "title": "Conus (Stephanoconus) cedonulli dominicanus Caraïbes 35,6 mm - N°52",
+      "price": 30,
+      "currency": "EUR",
+      "url": "https://www.ebay.fr/itm/167316921928?_skw=Conus+cedonulli&hash=item26f4dd9e48:g:tGUAAOSwD-pnsG6o",
+      "tailleVue": 35.6,
       "qualiteVue": null,
       "species": "cedonulli",
       "limit": 150
@@ -53,7 +53,7 @@
       "source": "eBay",
       "id": "ebay-v1|900022622372|0",
       "title": "Shell shell CONUS MASCARENENSIS mm 60.9 RARE Reunion (cm1401)",
-      "price": 120.51,
+      "price": 120.25,
       "currency": "GBP",
       "url": "https://www.ebay.co.uk/itm/900022622372?_skw=Conus+mascarenensis&hash=itemd18d8758a4:g:TZ0AAeSwI5tq1N1-",
       "tailleVue": null,
